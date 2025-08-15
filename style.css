@@ -1,0 +1,22 @@
+
+:root{--brand:#38bdf8;--brand2:#34d399;--brand3:#fbbf24;--bg:#f8fafc;--card:#ffffff;--text:#0f172a;--muted:#64748b;--shadow:0 10px 30px rgba(2,8,23,.06)}
+*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:Inter,system-ui,Segoe UI,Arial;background:var(--bg);color:var(--text)}
+a{color:var(--brand);text-decoration:none}
+.container{max-width:1160px;margin:0 auto;padding:20px}
+.nav{display:flex;gap:12px;align-items:center;padding:12px 18px;background:#fff;box-shadow:var(--shadow);position:sticky;top:0;z-index:10}
+.brand{font-weight:800;font-size:20px;color:var(--text)}
+.nav .spacer{flex:1}
+.btn{background:var(--brand);color:#fff;padding:10px 14px;border-radius:12px;border:0;cursor:pointer;box-shadow:var(--shadow)}
+.btn-ghost{background:transparent;color:var(--brand);border:1px solid var(--brand)}
+.grid{display:grid;gap:16px}.grid-2{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--card);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.hero{padding:60px 0;background:linear-gradient(180deg,#ffffff,#f1f5f9)}.hero h1{margin:0 0 10px;font-weight:900}.hero p{margin:0;color:var(--muted)}
+.tiles{display:grid;gap:16px;grid-template-columns:repeat(3,1fr);margin-top:22px}
+.tile{padding:24px;border-radius:14px;background:#fff;box-shadow:var(--shadow);transition:transform .15s ease}
+.tile:hover{transform:translateY(-4px)}.tile.jobs{border-top:5px solid var(--brand)}.tile.tenders{border-top:5px solid var(--brand3)}.tile.ads{border-top:5px solid var(--brand2)}
+.section{margin:30px 0}.table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.table th,.table td{padding:12px;border-bottom:1px solid #f1f5f9;text-align:right}
+.badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px}
+.footer{padding:26px;text-align:center;color:var(--muted)}.input,select,textarea{width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}
+label{font-size:14px;color:#374151;margin:6px 0;display:block}.alert{padding:12px;border-radius:10px;background:#fff7ed;color:#7c2d12;border:1px solid #fed7aa}
+.small{font-size:12px;color:var(--muted)}.ad-slot{border:2px dashed #e5e7eb;border-radius:12px;padding:16px;text-align:center;color:#6b7280;background:#fff}

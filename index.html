@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>الرئيسية</title>
+<link rel="stylesheet" href="/assets/style.css"/>
+<script src="/assets/config.js"></script>
+</head><body>
+<nav class="nav">
+  <a class="brand" href="/index.html" id="brand">منصّة التوظيف</a>
+  <a href="/jobs.html">الوظائف</a>
+  <a href="/tenders.html">المناقصات</a>
+  <span class="spacer"></span>
+  <a href="/company.html" class="btn">بوابة الشركات</a>
+</nav>
+<div class="container">
+<section class="hero"><div class="container">
+  <h1 id="siteTitle">منصّة التوظيف</h1>
+  <p id="tagline">ابحث عن وظيفة أو مناقصة بسهولة — وابدأ الآن.</p>
+  <div class="tiles">
+    <a class="tile jobs" href="/jobs.html"><h3>الوظائف</h3><p>استعرض أحدث الوظائف</p></a>
+    <a class="tile tenders" href="/tenders.html"><h3>المناقصات</h3><p>اطّلع على المناقصات المفتوحة</p></a>
+    <a class="tile ads" href="#ads"><h3>إعلانات تجارية</h3><p>مساحات يديرها الأدمن</p></a>
+  </div>
+</div></section>
+<div class="section">
+  <h2>وظائف مميزة</h2>
+  <table class="table" id="featuredJobs"><thead><tr><th>المسمى</th><th>الشركة</th><th>الموقع</th><th></th></tr></thead><tbody></tbody></table>
+</div>
+<div class="section">
+  <h2>مناقصات مميزة</h2>
+  <table class="table" id="featuredTenders"><thead><tr><th>العنوان</th><th>الجهة</th><th>الموقع</th><th></th></tr></thead><tbody></tbody></table>
+</div>
+<div class="section" id="ads"><h2>إعلانات تجارية</h2><div class="grid grid-3" id="adsGrid"><div class="ad-slot">مساحة إعلان</div><div class="ad-slot">مساحة إعلان</div><div class="ad-slot">مساحة إعلان</div></div></div>
+<script>
+const API=window.APP_CONFIG.API_BASE_URL;
+fetch(API+'/public?path=home').then(r=>r.json()).then(d=>{
+ document.getElementById('siteTitle').textContent=d.settings.site_name||'منصّة التوظيف';
+ document.getElementById('tagline').textContent=d.settings.site_tagline||'ابحث عن وظيفة أو مناقصة بسهولة — وابدأ الآن.';
+ const fj=document.querySelector('#featuredJobs tbody');
+ (d.featured_jobs||[]).forEach(j=>fj.insertAdjacentHTML('beforeend',`<tr><td>${j.title}</td><td>${j.company_name}</td><td>${j.location||''}</td><td><a href="/job.html?id=${j.id}">عرض</a></td></tr>`));
+ const ft=document.querySelector('#featuredTenders tbody');
+ (d.featured_tenders||[]).forEach(t=>ft.insertAdjacentHTML('beforeend',`<tr><td>${t.title}</td><td>${t.issuer}</td><td>${t.location||''}</td><td><a href="/tender.html?id=${t.id}">عرض</a></td></tr>`));
+ const ads=document.getElementById('adsGrid'); ads.innerHTML='';
+ (d.ads||[]).slice(0,6).forEach(a=>ads.insertAdjacentHTML('beforeend',`<a class="card" target="_blank" href="${a.target_url}"><img src="${a.image_url}" style="width:100%;border-radius:10px;max-height:160px;object-fit:cover"><div style="padding-top:8px">${a.title||''}</div></a>`));
+}).catch(()=>{});
+</script>
+</div>
+<div class="footer">© <span id="y"></span> منصّة التوظيف</div>
+<script>document.getElementById('y').textContent=new Date().getFullYear();document.getElementById('brand').textContent=window.APP_CONFIG.SITE_NAME;</script>
+</body></html>

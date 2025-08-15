@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "placement": "home",
+    "title": "إعلان تجريبي 1",
+    "image": "/assets/ads/ad1.png",
+    "link": "#"
+  },
+  {
+    "id": 2,
+    "placement": "home",
+    "title": "إعلان تجريبي 2",
+    "image": "/assets/ads/ad2.png",
+    "link": "#"
+  },
+  {
+    "id": 3,
+    "placement": "jobs",
+    "title": "إعلان توظيف",
+    "image": "/assets/ads/ad3.png",
+    "link": "#"
+  }
+]

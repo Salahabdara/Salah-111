@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>استقطاب المواهب</title>
+<link rel="stylesheet" href="/assets/style.css"/>
+<script src="/assets/config.js"></script>
+</head><body>
+<nav class="nav">
+  <a class="brand" href="/index.html" id="brand">منصّة التوظيف</a>
+  <a href="/jobs.html">الوظائف</a>
+  <a href="/tenders.html">المناقصات</a>
+  <span class="spacer"></span>
+  <a href="/company.html" class="btn">بوابة الشركات</a>
+</nav>
+<div class="container">
+<h2>استقطاب المواهب</h2>
+<form class="card grid grid-3" id="reqForm">
+  <label>المسمى المطلوب<input class="input" name="title"></label>
+  <label>الخبرة (سنوات)<input class="input" name="exp" type="number" min="0" value="0"></label>
+  <label>المهارات<textarea class="input" name="skills" rows="2" placeholder="Excel, ERP, Tax"></textarea></label>
+  <button class="btn" type="submit">بحث</button>
+</form>
+<h3>مرشّحون مطابقون</h3>
+<table class="table" id="cands"><thead><tr><th>المرشح</th><th>نسبة المطابقة</th><th></th><th></th></tr></thead><tbody></tbody></table>
+<div id="note" class="alert" style="display:none"></div>
+<script>
+const API=window.APP_CONFIG.API_BASE_URL;
+const token=new URLSearchParams(location.search).get('token')||localStorage.getItem('auth_token'); if(token) localStorage.setItem('auth_token', token);
+function alertRed(msg){const n=document.getElementById('note');n.style.display='block';n.textContent=msg;}
+document.getElementById('reqForm').addEventListener('submit', async (e)=>{
+ e.preventDefault();
+ const fd=new FormData(e.target);
+ const r=await fetch(API+'/ats?path=match',{method:'POST',headers:{'Authorization':'Bearer '+(localStorage.getItem('auth_token')||'')},body:fd});
+ const d=await r.json();
+ if(!r.ok){alertRed(d.message||'خطأ');return;}
+ const tb=document.querySelector('#cands tbody'); tb.innerHTML='';
+ (d.results||[]).forEach(c=>{
+  const dis=c.can_download?'':'disabled';
+  const warn=c.can_download?'':' style="color:#b91c1c" ';
+  tb.insertAdjacentHTML('beforeend',`<tr>
+    <td>${c.full_name}</td>
+    <td><span class="badge">${c.match_percent}%</span></td>
+    <td><button class="btn btn-ghost" data-id="${c.id}" data-job="${d.job_id}" onclick="requestAccess(event)">طلب تحميل</button></td>
+    <td><button class="btn" ${dis} data-id="${c.id}" data-job="${d.job_id}" onclick="downloadCV(event)">تحميل</button> <span ${warn}>${c.can_download?'':'⚠ يتطلب موافقة الإدارة / Admin approval required'}</span></td>
+  </tr>`);
+ });
+});
+async function requestAccess(e){
+  const id=e.target.getAttribute('data-id'); const job=e.target.getAttribute('data-job');
+  const r=await fetch(API+'/ats?path=request-access',{method:'POST',headers:{'Authorization':'Bearer '+(localStorage.getItem('auth_token')||'')},body:new URLSearchParams({candidate_id:id,job_id:job})});
+  const d=await r.json(); alertRed(d.message||'تم إرسال الطلب إلى الإدارة.');
+}
+async function downloadCV(e){
+  const id=e.target.getAttribute('data-id'); const job=e.target.getAttribute('data-job');
+  const r=await fetch(API+'/ats?path=cv-download&candidate_id='+encodeURIComponent(id)+'&job_id='+encodeURIComponent(job),{headers:{'Authorization':'Bearer '+(localStorage.getItem('auth_token')||'')}});
+  if(r.status===402){alertRed('⚠ لا يمكنك تحميل البيانات لهذه الوظيفة/المناقصة. يرجى التواصل مع إدارة المنصة لاستكمال إجراءات الدفع أو الموافقة. / You are not authorized.');return;}
+  if(!r.ok){alertRed('حدث خطأ.');return;}
+  const b=await r.blob(); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='candidate_cv.html'; document.body.appendChild(a); a.click(); a.remove();
+}
+</script>
+</div>
+<div class="footer">© <span id="y"></span> منصّة التوظيف</div>
+<script>document.getElementById('y').textContent=new Date().getFullYear();document.getElementById('brand').textContent=window.APP_CONFIG.SITE_NAME;</script>
+</body></html>
